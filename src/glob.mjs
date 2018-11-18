@@ -18,7 +18,10 @@ class Glob {
      */
     async resolvePatterns(baseDir, patterns) {
         return (await Promise.all(
-            patterns.map(pattern => this.resolvePattern(baseDir, pattern.split(path.sep)))
+            patterns.map(async (pattern) => {
+                if (pattern.startsWith('./')) pattern = pattern.slice(2);
+                return this.resolvePattern(baseDir, pattern.split('/'))
+            })
         )).reduce((storage, files) => {
             return storage.concat(files);
         }, []);
@@ -68,6 +71,8 @@ class Glob {
             // make sure we're matching files that are actual files that
             // match the pattern
             matchedFiles = (await Promise.all(files.map(async (fileName) => {
+                regexp.lastIndex = 0;
+                
                 const doesMatch = regexp.test(fileName);
                 let lstats;
 
@@ -87,6 +92,8 @@ class Glob {
 
             const regexp = this.buildRegExp(currrentPattern);
             const matchingDirectories = (await Promise.all(files.map(async (fileName) => {
+                regexp.lastIndex = 0;
+
                 const doesMatch = regexp.test(fileName);
                 let lstats;
 
@@ -149,8 +156,8 @@ class Glob {
      */
     buildRegExp(pattern) {
         pattern = pattern
-            .replace(/\*/g, '[^\.]*')
-            .replace(/\*/g, '[^\.]*')
+            .replace(/\./g, '\\.')
+            .replace(/\*/g, '.*')
             .replace(/\?/g, '[^\.]?')
             .replace(/\[\!([^\]]+)\]/g, '[^$1]')
             .replace(/\!\(([^\)]+)\)/g, '(?!$1)')
@@ -159,7 +166,7 @@ class Glob {
             .replace(/\*\(([^\)]+)\)/g, '($1)*')
             .replace(/@\(([^\)]+)\)/g, '($1)');
 
-        return new RegExp(pattern, 'gi');
+        return new RegExp(`^${pattern}$`, 'gi');
     }
 }
 
@@ -171,5 +178,5 @@ const glob = new Glob();
 
 
 export default async function(baseDir, ...patterns) {
-    return glob.parsePatterns(baseDir, patterns);
+    return glob.resolvePatterns(baseDir, patterns);
 }
