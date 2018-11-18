@@ -1,0 +1,12 @@
+name: glob
+organization: distributed-systems
+version: 1.0.0
+elevator-pitch: A clean and simple glob implementation
+engine:
+    node: 10.0.0+
+commands:
+    test: node --no-warnings --experimental-modules ./es-modules/distributed-systems/section-tests/x/bin/section.mjs ./test/*.mjs
+npm-convert:
+    source:
+        - ./src
+    destination: ./npm
