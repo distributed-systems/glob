@@ -1,0 +1,25 @@
+{
+  "name": "@distributed-systems/glob",
+  "version": "1.0.0",
+  "description": "dependencyless glob implementation",
+  "main": "npm/src/glob.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/distributed-systems/glob.git"
+  },
+  "keywords": [
+    "glob"
+  ],
+  "author": "Lina van der Weg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/distributed-systems/glob/issues"
+  },
+  "homepage": "https://github.com/distributed-systems/glob#readme"
+}
