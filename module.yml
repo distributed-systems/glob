@@ -2,6 +2,7 @@ name: glob
 organization: distributed-systems
 version: 1.0.0
 elevator-pitch: A clean and simple glob implementation
+main: src/glob.mjs
 engine:
     node: 10.0.0+
 commands:
