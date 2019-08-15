@@ -1,0 +1,1 @@
+import glob from './src/glob.js';
