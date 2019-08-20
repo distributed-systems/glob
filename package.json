@@ -2,7 +2,7 @@
   "name": "@distributed-systems/glob",
   "version": "2.0.0",
   "description": "dependencyless glob implementation",
-  "main": "npm/src/glob.mjs",
+  "main": "npm/src/glob.js",
   "directories": {
     "test": "test"
   },
