@@ -1,6 +1,6 @@
 {
   "name": "@distributed-systems/glob",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "dependencyless glob implementation",
   "main": "dist/index.js",
   "directories": {},
