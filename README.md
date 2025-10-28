@@ -19,7 +19,7 @@ import glob from '@distributed-systems/glob';
 
 
 // find all .mjs inside the /home/ee directory
-const absolutFilePaths = await glob('/home/ee', '**/*.mjs');
+const absolutFilePaths = await glob('/home/lina', '**/*.mjs');
 ```
 
 

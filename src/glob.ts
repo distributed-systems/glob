@@ -16,15 +16,11 @@ class Glob {
      * @param      {Array[String]}   patterns  the patterns to match
      * @return     {Promise<Array>}  resolved files
      */
-    async resolvePatterns(baseDir, patterns) {
-        return (await Promise.all(
-            patterns.map(async (pattern) => {
-                if (pattern.startsWith('./')) pattern = pattern.slice(2);
-                return this.resolvePattern(baseDir, pattern.split('/'))
-            })
-        )).reduce((storage, files) => {
-            return storage.concat(files);
-        }, []);
+    async resolvePatterns(baseDir: string, patterns: string[]): Promise<string[]> {
+        return (await Promise.all(patterns.map(async (pattern) => {
+            if (pattern.startsWith('./')) pattern = pattern.slice(2);
+            return this.resolvePattern(baseDir, pattern.split('/'));
+        }))).reduce((storage, files) => storage.concat(files), []);
     }
 
 
@@ -45,7 +41,7 @@ class Glob {
      *                                            be traversed recursively
      * @return     {Promise<Array>}  resolved files
      */
-    async resolvePattern(baseDir, patterParts, tryAll = false) {
+    async resolvePattern(baseDir: string, patterParts: string[], tryAll: boolean = false): Promise<string[]> {
         let currrentPattern = patterParts[0];
 
         if (currrentPattern === '**') {
@@ -54,7 +50,7 @@ class Glob {
 
             // skip the current pattern
             currrentPattern = patterParts[1];
-            patterParts = patterParts.slice(1);
+            patterParts = patterParts.slice(1) as unknown as string[];
         }
 
 
@@ -66,7 +62,7 @@ class Glob {
             // files need to match the regexp here since its the 
             // last path part
             
-            const regexp = this.buildRegExp(currrentPattern);
+            const regexp = this.buildRegExp(currrentPattern as string);
 
             // make sure we're matching files that are actual files that
             // match the pattern
@@ -111,7 +107,7 @@ class Glob {
 
             // collect files for all directories
             matchedFiles = (await Promise.all(
-                matchingDirectories.map(directoryName => this.resolvePattern(path.join(baseDir, directoryName), patterParts.slice(1)))
+                matchingDirectories.map(directoryName => this.resolvePattern(path.join(baseDir, directoryName), patterParts.slice(1) as unknown as string[]))
             )).reduce((storage, files) => {
                 return storage.concat(files);
             }, []);
@@ -154,7 +150,7 @@ class Glob {
      * @param      {string}  pattern  The pattern
      * @return     {RegExp}  the regular expression
      */
-    buildRegExp(pattern) {
+    buildRegExp(pattern: string): RegExp {
         pattern = pattern
             .replace(/\./g, '\\.')
             .replace(/\*/g, '.*')
@@ -177,6 +173,6 @@ class Glob {
 const glob = new Glob();
 
 
-export default async function(baseDir, ...patterns) {
+export default async function(baseDir: string, ...patterns: string[]): Promise<string[]> {
     return glob.resolvePatterns(baseDir, patterns);
-}
+};
